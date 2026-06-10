@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nibbanraj Kamble</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1117;
+  --panel:#131A23;
+  --panel2:#1A2330;
+  --violet:#A78BFA;
+  --violet-dim:#7C5CE0;
+  --mint:#5EEAD4;
+  --text:#E6EDF3;
+  --mid:#8B949E;
+  --faint:#484F58;
+  --line:rgba(255,255,255,0.07);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex}
+::selection{background:var(--violet);color:#0D1117}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:2rem 0}
+.side-logo{padding:0 1.75rem;margin-bottom:3rem}
+.side-logo-name{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:-0.01em}
+.side-logo-name span{color:var(--violet)}
+.side-logo-sub{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--mid);margin-top:0.3rem;letter-spacing:0.05em}
+.side-nav{flex:1;display:flex;flex-direction:column;gap:0.2rem;padding:0 1rem}
+.side-link{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 0.85rem;border-radius:8px;font-size:0.82rem;color:var(--mid);cursor:pointer;transition:all .15s;border:none;background:none;font-family:'Inter',sans-serif;text-align:left;width:100%}
+.side-link:hover{background:var(--panel2);color:var(--text)}
+.side-link.active{background:var(--panel2);color:var(--violet)}
+.side-link .idx{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--faint);width:18px}
+.side-link.active .idx{color:var(--violet)}
+.side-foot{padding:1.25rem 1.75rem 0;border-top:1px solid var(--line);margin-top:1rem}
+.side-foot a{display:block;font-size:0.72rem;color:var(--mid);text-decoration:none;padding:0.3rem 0;transition:color .15s}
+.side-foot a:hover{color:var(--mint)}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);margin-right:0.5rem;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.status-line{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--mid);margin-bottom:0.75rem}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;position:relative}
+.view{display:none;padding:3.5rem 4rem;max-width:1100px;animation:fadeUp .35s ease}
+.view.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--mint);margin-bottom:1rem}
+.h-xl{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.6rem,5.5vw,4.5rem);font-weight:700;line-height:1.04;letter-spacing:-0.03em}
+.h-xl em{font-style:normal;color:var(--violet)}
+.h-lg{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:600;letter-spacing:-0.02em;margin-bottom:0.5rem}
+.lead{font-size:0.95rem;color:var(--mid);line-height:1.8;max-width:560px;margin-bottom:2.5rem}
+
+/* ── HOME ── */
+.home-flex{display:flex;gap:4rem;align-items:center;min-height:calc(100vh - 7rem)}
+.home-text{flex:1}
+.home-tag{margin-top:1.75rem;font-size:1rem;color:var(--mid);line-height:1.75;max-width:440px}
+.home-tag strong{color:var(--text)}
+.cta-row{margin-top:2.25rem;display:flex;gap:0.75rem;flex-wrap:wrap}
+.btn{font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:500;padding:0.75rem 1.5rem;border-radius:8px;cursor:pointer;transition:all .15s;border:none}
+.btn-v{background:var(--violet);color:#0D1117}
+.btn-v:hover{background:var(--violet-dim);color:white}
+.btn-o{background:transparent;color:var(--text);border:1px solid var(--faint)}
+.btn-o:hover{border-color:var(--violet);color:var(--violet)}
+.btn-m{background:transparent;color:var(--mint);border:1px solid rgba(94,234,212,0.3)}
+.btn-m:hover{background:rgba(94,234,212,0.08)}
+.home-chips{margin-top:2.5rem;display:flex;gap:0.5rem;flex-wrap:wrap}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--mid);border:1px solid var(--line);background:var(--panel);padding:0.35rem 0.75rem;border-radius:99px}
+
+/* wheel panel */
+.wheel-panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:2.5rem;text-align:center}
+.wheel-cap-t{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;margin-top:1.25rem}
+.wheel-cap-s{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--mid);margin-top:0.25rem}
+
+/* ── ABOUT ── */
+.about-cols{display:grid;grid-template-columns:300px 1fr;gap:3.5rem;align-items:start}
+.photo-frame{background:var(--panel);border:1px dashed var(--faint);border-radius:12px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;color:var(--mid);font-size:0.75rem;text-align:center;padding:1.5rem}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1rem}
+.metric{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:0.9rem}
+.metric-n{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:var(--violet)}
+.metric-l{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--mid);margin-top:0.15rem}
+.prose{font-size:0.92rem;color:var(--mid);line-height:1.85}
+.prose p+p{margin-top:1.1rem}
+.prose strong{color:var(--text);font-weight:500}
+.prose h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;color:var(--text);margin:2rem 0 0.75rem}
+
+/* ── JOURNEY ── */
+.j-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.j-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.5rem;cursor:pointer;transition:all .2s;position:relative}
+.j-card:hover{border-color:rgba(167,139,250,0.4);transform:translateY(-2px);background:var(--panel2)}
+.j-idx{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--faint);margin-bottom:0.75rem;display:flex;justify-content:space-between}
+.j-idx .when{color:var(--mint)}
+.j-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;letter-spacing:-0.01em}
+.j-prev{font-size:0.8rem;color:var(--mid);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.j-tag{display:inline-block;margin-top:0.9rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--violet);background:rgba(167,139,250,0.1);padding:0.25rem 0.6rem;border-radius:99px}
+.j-arrow{position:absolute;top:1.4rem;right:1.4rem;color:var(--faint);transition:all .2s;font-size:0.85rem}
+.j-card:hover .j-arrow{color:var(--violet);transform:translate(2px,-2px)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(5,8,12,0.75);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:1.5rem}
+.overlay.open{display:flex}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:min(620px,94vw);max-height:82vh;overflow-y:auto;padding:2.5rem;position:relative}
+.sheet-x{position:absolute;top:1.25rem;right:1.25rem;background:var(--panel2);border:none;color:var(--mid);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:0.9rem;transition:all .15s}
+.sheet-x:hover{color:var(--text);background:var(--faint)}
+.sheet-when{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--mint);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem}
+.sheet-title{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.3rem}
+.sheet-theory{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--mid);margin-bottom:1.5rem}
+.sheet-body{font-size:0.88rem;color:var(--mid);line-height:1.8}
+.sheet-action{margin-top:1.5rem;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.25rem;display:flex;gap:0.75rem;align-items:flex-start}
+.sheet-pill{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;background:var(--violet);color:#0D1117;padding:0.25rem 0.6rem;border-radius:99px;white-space:nowrap;margin-top:0.1rem;font-weight:500}
+.sheet-atext{font-size:0.8rem;color:var(--text);line-height:1.6}
+
+/* ── QUIZ ── */
+.quiz-shell{max-width:600px;margin:0 auto;text-align:center;padding-top:2rem}
+.q-dots{display:flex;gap:6px;justify-content:center;margin:2rem 0}
+.q-dot{width:24px;height:4px;border-radius:99px;background:var(--panel2);transition:background .3s}
+.q-dot.done{background:var(--violet)}
+.q-dot.active{background:var(--mint)}
+.q-question{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;margin-bottom:1.75rem;min-height:3rem;line-height:1.4}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem}
+.q-opt{background:var(--panel);border:1px solid var(--line);color:var(--mid);padding:1rem;font-size:0.82rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;text-align:left;line-height:1.45;border-radius:10px}
+.q-opt:hover{border-color:var(--violet);color:var(--text);background:var(--panel2)}
+.q-opt.picked{border-color:var(--violet);background:rgba(167,139,250,0.12);color:var(--violet)}
+.q-result{display:none;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:2rem;text-align:left;margin-top:1rem}
+.q-result-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.7rem;border-radius:99px;margin-bottom:1rem;color:#0D1117;font-weight:500}
+.q-result-title{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:0.6rem}
+.q-result-body{font-size:0.85rem;color:var(--mid);line-height:1.75}
+.q-restart{margin-top:1.25rem;background:none;border:1px solid var(--faint);color:var(--mid);padding:0.55rem 1.1rem;font-size:0.75rem;border-radius:8px;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s}
+.q-restart:hover{color:var(--text);border-color:var(--mid)}
+
+/* ── CONNECT ── */
+.c-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:880px}
+.c-panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:2rem}
+.c-panel-title{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:0.4rem}
+.c-panel-sub{font-size:0.78rem;color:var(--mid);line-height:1.6;margin-bottom:1.5rem}
+.dz{border:1.5px dashed var(--faint);border-radius:12px;padding:2.25rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s}
+.dz:hover,.dz.drag{border-color:var(--violet);background:rgba(167,139,250,0.05)}
+.dz-icon{font-size:1.6rem;margin-bottom:0.6rem;opacity:0.5}
+.dz-main{font-size:0.82rem;font-weight:500;margin-bottom:0.2rem}
+.dz-sub{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--mid)}
+.hidden{display:none}
+.fp{display:none;margin-top:1rem;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.fp-name{font-size:0.8rem;margin-bottom:0.6rem}
+.fp-row{display:flex;gap:0.5rem}
+.dz-note{margin-top:0.85rem;font-size:0.68rem;color:var(--faint);line-height:1.5}
+.li-avatar{width:52px;height:52px;border-radius:12px;background:rgba(94,234,212,0.12);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--mint);margin-bottom:1rem}
+.li-name{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;margin-bottom:0.2rem}
+.li-role{font-size:0.75rem;color:var(--mid);line-height:1.55;margin-bottom:1.25rem}
+.li-row{display:flex;gap:1.75rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--line)}
+.li-n{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:var(--mint)}
+.li-l{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--mid);margin-top:0.1rem}
+.li-url{margin-top:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--faint);word-break:break-all}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:0.8rem 1.1rem;font-size:0.78rem;z-index:999;border-radius:10px;transform:translateY(80px);opacity:0;transition:all .3s;border-left:3px solid var(--violet)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── MOBILE ── */
+.mobile-bar{display:none}
+@media(max-width:860px){
+  body{flex-direction:column}
+  .sidebar{display:none}
+  .mobile-bar{display:flex;flex-shrink:0;overflow-x:auto;gap:0.25rem;padding:0.75rem 1rem;background:var(--panel);border-bottom:1px solid var(--line)}
+  .m-link{flex-shrink:0;font-size:0.72rem;color:var(--mid);background:none;border:1px solid var(--line);padding:0.5rem 0.9rem;border-radius:99px;font-family:'Space Grotesk',sans-serif;cursor:pointer}
+  .m-link.active{color:#0D1117;background:var(--violet);border-color:var(--violet)}
+  .view{padding:2rem 1.25rem}
+  .home-flex{flex-direction:column;gap:2.5rem;min-height:auto}
+  .wheel-panel{width:100%}
+  .about-cols,.c-grid{grid-template-columns:1fr;gap:2rem}
+  .q-opts{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="side-logo">
+    <div class="side-logo-name">nibban<span>.</span>dev</div>
+    <div class="side-logo-sub">cyber · ai · strategy</div>
+  </div>
+  <nav class="side-nav">
+    <button class="side-link active" data-v="home" onclick="go('home')"><span class="idx">00</span> Home</button>
+    <button class="side-link" data-v="about" onclick="go('about')"><span class="idx">01</span> About me</button>
+    <button class="side-link" data-v="journey" onclick="go('journey')"><span class="idx">02</span> The journey</button>
+    <button class="side-link" data-v="quiz" onclick="go('quiz')"><span class="idx">03</span> What's your style?</button>
+    <button class="side-link" data-v="connect" onclick="go('connect')"><span class="idx">04</span> CV &amp; contact</button>
+  </nav>
+  <div class="side-foot">
+    <p class="status-line"><span class="status-dot"></span>open to opportunities</p>
+    <a href="https://linkedin.com/in/nibbanrajkamble-527b43223" target="_blank">↗ LinkedIn</a>
+    <a href="#" onclick="go('connect');return false">↓ Download CV</a>
+  </div>
+</aside>
+
+<!-- MOBILE NAV -->
+<div class="mobile-bar">
+  <button class="m-link active" data-v="home" onclick="go('home')">Home</button>
+  <button class="m-link" data-v="about" onclick="go('about')">About</button>
+  <button class="m-link" data-v="journey" onclick="go('journey')">Journey</button>
+  <button class="m-link" data-v="quiz" onclick="go('quiz')">Quiz</button>
+  <button class="m-link" data-v="connect" onclick="go('connect')">CV</button>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HOME -->
+  <div class="view active" id="v-home">
+    <div class="home-flex">
+      <div class="home-text">
+        <p class="kicker">// cyber security · ai governance · strategy</p>
+        <h1 class="h-xl">Hey, I'm<br><em>Nibbanraj</em><br>Kamble</h1>
+        <p class="home-tag">Seven years keeping systems alive as an <strong>SRE and ops engineer</strong>. Now building the leadership to match — fresh off an MBA, headed toward <strong>CISO-track and AI governance</strong> roles.</p>
+        <div class="cta-row">
+          <button class="btn btn-v" onclick="go('about')">About me</button>
+          <button class="btn btn-o" onclick="go('journey')">The journey</button>
+          <a href="https://linkedin.com/in/nibbanrajkamble-527b43223" target="_blank"><button class="btn btn-m">LinkedIn ↗</button></a>
+        </div>
+        <div class="home-chips">
+          <span class="chip">CISSP in progress</span>
+          <span class="chip">ex-Cohesity SRE</span>
+          <span class="chip">Aston MBA</span>
+        </div>
+      </div>
+      <div class="wheel-panel">
+        <svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <path d="M120,120 L228,120 A108,108 0 0,0 120,12 Z" fill="#F87171" opacity="0.85"/>
+          <path d="M120,120 L120,12 A108,108 0 0,0 12,120 Z" fill="#60A5FA" opacity="0.5"/>
+          <path d="M120,120 L12,120 A108,108 0 0,0 120,228 Z" fill="#4ADE80" opacity="0.3"/>
+          <path d="M120,120 L120,228 A108,108 0 0,0 228,120 Z" fill="#FACC15" opacity="0.3"/>
+          <line x1="120" y1="12" x2="120" y2="228" stroke="#0D1117" stroke-width="2"/>
+          <line x1="12" y1="120" x2="228" y2="120" stroke="#0D1117" stroke-width="2"/>
+          <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <text x="172" y="74" text-anchor="middle" fill="#0D1117" font-size="8.5" font-family="'Space Grotesk',sans-serif" font-weight="700">FIERY RED</text>
+          <text x="68" y="74" text-anchor="middle" fill="#0D1117" font-size="8.5" font-family="'Space Grotesk',sans-serif" font-weight="600">COOL BLUE</text>
+          <text x="66" y="172" text-anchor="middle" fill="#E6EDF3" font-size="8" font-family="'Space Grotesk',sans-serif">EARTH GREEN</text>
+          <text x="176" y="172" text-anchor="middle" fill="#E6EDF3" font-size="7.5" font-family="'Space Grotesk',sans-serif">SUNSHINE YELLOW</text>
+          <circle cx="184" cy="68" r="10" fill="#A78BFA" stroke="#0D1117" stroke-width="2.5">
+            <animate attributeName="r" values="10;13;10" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="184" y="72" text-anchor="middle" fill="#0D1117" font-size="8" font-family="'Space Grotesk',sans-serif" font-weight="700">42</text>
+          <circle cx="120" cy="120" r="34" fill="#131A23" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <text x="120" y="116" text-anchor="middle" fill="#E6EDF3" font-size="7.5" font-family="'Space Grotesk',sans-serif" font-weight="600">Reforming</text>
+          <text x="120" y="128" text-anchor="middle" fill="#E6EDF3" font-size="7.5" font-family="'Space Grotesk',sans-serif" font-weight="600">Director</text>
+        </svg>
+        <p class="wheel-cap-t">Insights Discovery</p>
+        <p class="wheel-cap-s">position 42 · fiery red dominant</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="view" id="v-about">
+    <p class="kicker">// 01 — about</p>
+    <h2 class="h-lg">A bit about me</h2>
+    <p class="lead">I'm a tech person who got tired of being just a tech person. Here's the honest version.</p>
+    <div class="about-cols">
+      <div>
+        <!-- ✏️ Replace with: <img src="photo.jpg" style="width:100%;border-radius:12px"> -->
+        <div class="photo-frame">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span style="font-weight:500">Your photo here</span>
+          <span style="font-size:0.65rem;opacity:0.5">Swap this div for an &lt;img&gt; tag</span>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><div class="metric-n">7+</div><div class="metric-l">years in tech</div></div>
+          <div class="metric"><div class="metric-n">68%</div><div class="metric-l">fiery red</div></div>
+          <div class="metric"><div class="metric-n">CISO</div><div class="metric-l">target role</div></div>
+          <div class="metric"><div class="metric-n">MBA</div><div class="metric-l">aston uni</div></div>
+        </div>
+      </div>
+      <div class="prose">
+        <p>I spent the better part of a decade being the person who kept systems running — <strong>SRE at Cohesity, Linux admin at EOS, operations at Sify Technologies</strong>. I was good at it. But I kept noticing the decisions I wanted to influence were being made in rooms I wasn't in.</p>
+        <p>So I did the MBA. Not because I had a crisis — because I had a direction and needed the tools to get there. The honest version of that year? Half was learning new frameworks. The other half was learning to see myself clearly — the parts that work, and the parts that quietly get in the way.</p>
+        <p>My Insights Discovery profile calls me a <strong>Reforming Director</strong> — Fiery Red dominant, results-driven, impatient with inefficiency. Accurate. What I didn't expect was how useful it is to have those patterns named precisely. It's hard to change what you can't see.</p>
+        <h3>Where I'm headed</h3>
+        <p>Senior cyber security leadership — <strong>CISO-track roles, AI governance, or strategy consulting</strong> at the intersection of technology and business risk. I want to be the person in that room now, making those decisions well.</p>
+        <p>Currently working through CISSP certification and AI governance programmes, posting on LinkedIn about cyber leadership, and looking for the right post-MBA opportunity.</p>
+        <div class="cta-row" style="margin-top:1.75rem">
+          <a href="https://linkedin.com/in/nibbanrajkamble-527b43223" target="_blank"><button class="btn btn-m">LinkedIn ↗</button></a>
+          <button class="btn btn-o" onclick="go('connect')">Download CV</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNEY -->
+  <div class="view" id="v-journey">
+    <p class="kicker">// 02 — the journey</p>
+    <h2 class="h-lg">Moments that changed how I lead</h2>
+    <p class="lead">Over the past year, a handful of sessions, conversations and uncomfortable moments genuinely shifted how I think about leadership. Click any card for the full story.</p>
+    <div class="j-grid" id="jgrid"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="view" id="v-quiz">
+    <div class="quiz-shell">
+      <p class="kicker">// 03 — interactive</p>
+      <h2 class="h-lg">What's your leadership style?</h2>
+      <p class="lead" style="margin:0 auto 1rem">Four quick questions. Find which Insights colour you lead with — and how it compares to my Fiery Red.</p>
+      <div class="q-dots" id="qdots"></div>
+      <p class="q-question" id="qq"></p>
+      <div class="q-opts" id="qo"></div>
+      <div class="q-result" id="qr"></div>
+    </div>
+  </div>
+
+  <!-- CONNECT -->
+  <div class="view" id="v-connect">
+    <p class="kicker">// 04 — connect</p>
+    <h2 class="h-lg">Let's talk</h2>
+    <p class="lead">Whether you want to chat cyber, AI governance, or just see what I've been working on — here's how to find me.</p>
+    <div class="c-grid">
+      <div class="c-panel">
+        <h3 class="c-panel-title">My CV</h3>
+        <p class="c-panel-sub">Upload your latest CV — visitors can download it directly from here.</p>
+        <div class="dz" id="dz" onclick="document.getElementById('fi').click()" ondragover="dr(event,true)" ondragleave="dr(event,false)" ondrop="dp(event)">
+          <div class="dz-icon">📄</div>
+          <p class="dz-main" id="dzm">Drop CV here or click to upload</p>
+          <p class="dz-sub" id="dzs">pdf / doc / docx · max 10mb</p>
+          <input type="file" id="fi" class="hidden" accept=".pdf,.doc,.docx" onchange="lf(this.files[0])">
+        </div>
+        <div class="fp" id="fp">
+          <p class="fp-name" id="fpn"></p>
+          <div class="fp-row">
+            <button class="btn btn-v" style="font-size:0.72rem;padding:0.5rem 1rem" id="dlb">↓ Download</button>
+            <button class="btn btn-o" style="font-size:0.72rem;padding:0.5rem 0.9rem" onclick="cf()">Remove</button>
+          </div>
+        </div>
+        <p class="dz-note">To make the download permanent: host your CV at a URL and point the download button there instead.</p>
+      </div>
+      <div class="c-panel">
+        <h3 class="c-panel-title">LinkedIn</h3>
+        <p class="c-panel-sub">I post about AI governance, cyber leadership, and the honest side of career changes.</p>
+        <div class="li-avatar">NK</div>
+        <p class="li-name">Nibbanraj Kamble</p>
+        <p class="li-role">MBA · Aston University | Cyber Security &amp; AI Governance | ex-SRE @ Cohesity</p>
+        <div class="li-row">
+          <div><div class="li-n">500+</div><div class="li-l">target network</div></div>
+          <div><div class="li-n">CISO</div><div class="li-l">career goal</div></div>
+        </div>
+        <a href="https://linkedin.com/in/nibbanrajkamble-527b43223" target="_blank">
+          <button class="btn btn-v" style="width:100%">View LinkedIn profile ↗</button>
+        </a>
+        <p class="li-url">linkedin.com/in/nibbanrajkamble-527b43223</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="overlay" id="ov" onclick="if(event.target===this)cm()">
+  <div class="sheet">
+    <button class="sheet-x" onclick="cm()">✕</button>
+    <p class="sheet-when" id="sw"></p>
+    <h2 class="sheet-title" id="st"></h2>
+    <p class="sheet-theory" id="sth"></p>
+    <p class="sheet-body" id="sb"></p>
+    <div class="sheet-action">
+      <span class="sheet-pill" id="sp"></span>
+      <span class="sheet-atext" id="sa"></span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const J=[
+  {when:"oct 2025",title:"Getting profiled",tag:"self-awareness",theory:"Insights Discovery · Goleman EI",preview:"Found out my Fiery Red dominance wasn't just ambition — it was a pattern that could genuinely wear people down.",body:"My Insights profile placed me at Wheel position 42 — Reforming Director — with Fiery Red dominant at 68%. Reading it was uncomfortable. The drive for results, impatience with inefficiency, and tendency to appear arrogant under pressure were accurate. What I'd framed as strengths were named as blind spots that could harm others. Goleman's work on emotional intelligence helped me understand why this matters: self-awareness is only useful when it produces self-management.",pill:"what i did",action:"Started style-flexing before key interactions. Began practising patience — asking questions first, resisting the urge to close."},
+  {when:"nov 2025",title:"The wrong career lane",tag:"career clarity",theory:"Hall (1996) · Lightcast data",preview:"The market had moved. Technical skills were declining at senior level while AI strategy and consulting roles grew fast.",body:"Labour market data made the picture stark: technical IT skills were declining in senior-level postings while AI strategy, governance, and consulting roles were growing sharply. An alumni speaker described securing promotion through an explicit career conversation — not by waiting. Her story exposed what I'd been avoiding. I had a detailed plan for academic performance, and no plan for actually getting to the roles I wanted.",pill:"what shifted",action:"Rewrote my goals around senior cyber and AI leadership. Committed to an annual market review so my planning never drifts from reality."},
+  {when:"nov 2025",title:"Invisible on purpose",tag:"personal brand",theory:"Peters (1997) · Ibarra (2015)",preview:"I had no LinkedIn headline. Zero professional visibility — despite claiming to care about recognition for results.",body:"My LinkedIn profile had no headline beyond the default job title. Peers in the room pointed it out directly. The contradiction was hard to argue with: I want recognition for results, but I'd been professionally invisible by choice, assuming technical competence would speak for itself. Ibarra's work helped me understand why building visibility felt uncomfortable: expressing a new identity before you fully believe it is how the belief forms — not a sign of being fake.",pill:"what i did",action:"Built a new LinkedIn headline on the spot. Committed to updating it every six months as the career evolves."},
+  {when:"dec 2025",title:"The Pecha Kucha moment",tag:"communication",theory:"Sinek (2009) · Cialdini (1984)",preview:"Twenty slides, auto-advancing, no notes. The confidence that relies on controlling pace completely disappeared.",body:"The format was brutal: twenty slides advancing automatically, no ability to pause, no notes. My profile had flagged fear of loss of face, and I felt it precisely. The confidence that usually comes from controlling the pace of a conversation just wasn't available. What I learned: leading with the 'why' — the problem behind the solution — consistently landed better than leading with the solution itself. I tested this across three real pitches and each time the audience leaned in more.",pill:"what changed",action:"Now apply Start With Why and a Three-Act structure to every proposal. Treat psychological safety as the thing to build from day one in any team."},
+  {when:"early 2026",title:"AI isn't the threat — we are",tag:"ai & leadership",theory:"WEF (2023) · Deloitte (2024)",preview:"AI skills nearly doubled in senior postings over three years. The constraint on AI value isn't technology. It's leadership.",body:"With an SRE background, the operational side of AI wasn't new to me. What got reframed was the leadership dimension: organisations aren't struggling to deploy AI — 65% already use generative AI according to Deloitte — they're struggling to get value from it. The bottleneck is human leadership and governance, not technical capability. That's a different problem, and a much more interesting one to work on.",pill:"committed to",action:"AI governance certification by end of 2026. Reframing my expertise as AI-risk governance leadership, not technical function."},
+  {when:"feb 2026",title:"The step I always skip",tag:"reflection",theory:"Kolb (1984) · Schön (1983)",preview:"I'd been jumping straight from experience to action my whole career — skipping the observation step that produces real learning.",body:"Applying several reflective frameworks to a real situation surfaced a pattern I'd never named: I consistently skip the deliberate observation step. My energy moves from experience straight to action — bypassing the pause that actually produces insight. Schön's idea of reflection-in-action reframed this: in a security leadership role, the ability to reflect in real time — during an incident, mid-negotiation — is an operational skill, not an academic nicety.",pill:"what i now do",action:"Weekly reflection journal. A deliberate pause before reacting in high-stakes moments. Noticing what I'm assuming before I respond."},
+  {when:"2026",title:"The CV that actually worked",tag:"job search",theory:"Ibarra (2015) · ATS principles",preview:"Same experience, different framing. The rebuilt CV started getting real responses from employers within weeks.",body:"This had the most immediately measurable outcome of anything in the year. Applying value-forward framing and ATS optimisation to my CV produced a direct result: recruiter interest where the previous version had produced silence. The same professional history, told differently, produced a market response the old version hadn't. You have to practise the new narrative externally before it feels settled internally — that's not faking it, that's how identity change works.",pill:"the result",action:"Recruiter responses secured. Now posting fortnightly on LinkedIn, building toward 500+ connections in CISO, consulting and AI strategy circles."},
+  {when:"may 2026",title:"Negotiating against myself",tag:"negotiation",theory:"Fisher & Ury (1981) · Thomas-Kilmann",preview:"Mid-simulation, I realised I was doing exactly what my profile said I'd do under pressure. That was the lesson.",body:"A negotiation simulation put me in a multi-issue airline deal. I'd prepared well — fallback position identified, issues ranked. But when the other side anchored aggressively, instinct kicked in: defend, push back, control. Recognising that pattern mid-conversation — watching myself do the thing — was more instructive than any analysis. My default under pressure is high assertiveness, low cooperativeness. Naming it as a learned default rather than a fixed trait is the precondition for changing it.",pill:"now building",action:"A personal negotiation prep template that maps win-win opportunities, not just fallback positions. Practising interests-before-positions daily."}
+];
+
+const QQ=[
+  {q:"In a new group project, your first move is...",o:["Define the goal and drive toward it","Get the lay of the land before acting","Ask questions until everything's clear","Rally the energy and get people excited"]},
+  {q:"Under real deadline pressure, you tend to...",o:["Make the call quickly and move","Stay calm and check in with people","Analyse before committing to anything","Keep morale up and keep it moving"]},
+  {q:"Someone gives you feedback you disagree with. You...",o:["Challenge it directly — I'll say so","Listen carefully, even if it stings","Ask for evidence, then evaluate","Protect the relationship first"]},
+  {q:"What do people value most in you as a leader?",o:["Getting results even when it's hard","Making everyone feel genuinely heard","Rigour — I don't miss things","Energy and optimism in the room"]}
+];
+const QR=[
+  {c:"Fiery Red",hex:"#F87171",t:"Decisive Director",b:"You lead with drive and directness — results first, process second. Same energy as my dominant profile. The growth edge: slowing down to ask what others need before closing, rather than after."},
+  {c:"Earth Green",hex:"#4ADE80",t:"Caring Connector",b:"Relationships come first for you. You build the psychological safety high-performing teams actually need. The growth edge: asserting yourself when decisions need to happen fast."},
+  {c:"Cool Blue",hex:"#60A5FA",t:"Analytical Thinker",b:"You want to be right before you commit — and you usually are. The growth edge: acting before every data point is in. Speed often matters as much as accuracy."},
+  {c:"Sunshine Yellow",hex:"#FACC15",t:"Energising Influencer",b:"You create momentum and bring people with you. The growth edge: converting that enthusiasm into sustained execution after the exciting launch phase ends."}
+];
+
+// journey cards
+const g=document.getElementById('jgrid');
+J.forEach((d,i)=>{
+  const c=document.createElement('div');c.className='j-card';
+  c.innerHTML=`<span class="j-arrow">↗</span><div class="j-idx"><span>0${i+1}</span><span class="when">${d.when}</span></div><h3 class="j-title">${d.title}</h3><p class="j-prev">${d.preview}</p><span class="j-tag">${d.tag}</span>`;
+  c.onclick=()=>om(i);g.appendChild(c);
+});
+function om(i){const d=J[i];
+  sw.textContent=d.when;st.textContent=d.title;sth.textContent=d.theory;
+  sb.textContent=d.body;sp.textContent=d.pill;sa.textContent=d.action;
+  ov.classList.add('open');}
+function cm(){ov.classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cm()});
+
+// nav
+function go(id){
+  document.querySelectorAll('.side-link,.m-link').forEach(b=>b.classList.toggle('active',b.dataset.v===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='v-'+id));
+  document.querySelector('.main').scrollTop=0;
+  if(id==='quiz')bq();
+}
+
+// quiz
+let qi=0,sc=[0,0,0,0],started=false;
+function bq(){if(started&&qi<QQ.length)return;started=true;qi=0;sc=[0,0,0,0];rq();}
+function rq(){
+  const dd=document.getElementById('qdots');dd.innerHTML='';
+  QQ.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i<qi?' done':i===qi?' active':'');dd.appendChild(d);});
+  qr.style.display='none';
+  qq.textContent=QQ[qi].q;
+  qo.innerHTML='';
+  QQ[qi].o.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='q-opt';b.textContent=o;
+    b.onclick=()=>{sc[i]++;b.classList.add('picked');setTimeout(()=>{qi++;qi<QQ.length?rq():sr();},400);};
+    qo.appendChild(b);
+  });
+}
+function sr(){
+  qq.textContent='';qo.innerHTML='';document.getElementById('qdots').innerHTML='';
+  const t=sc.indexOf(Math.max(...sc));const r=QR[t];
+  qr.style.display='block';
+  qr.innerHTML=`<span class="q-result-tag" style="background:${r.hex}">${r.c} energy</span><h3 class="q-result-title">${r.t}</h3><p class="q-result-body">${r.b}</p><button class="q-restart" onclick="rsq()">↺ retake</button>`;
+}
+function rsq(){started=false;bq();}
+
+// cv upload
+let u=null;
+function lf(f){
+  if(!f)return;
+  if(f.size>10*1024*1024){tt('File too large — max 10MB');return;}
+  u=URL.createObjectURL(f);
+  dzm.textContent='CV uploaded ✓';dzs.textContent=f.name+' · '+Math.round(f.size/1024)+'kb';
+  fp.style.display='block';fpn.textContent='📄  '+f.name;
+  dlb.onclick=()=>{const a=document.createElement('a');a.href=u;a.download=f.name;a.click();};
+  tt('CV ready — download is live');
+}
+function dr(e,on){e.preventDefault();dz.classList.toggle('drag',on);}
+function dp(e){e.preventDefault();dr(e,false);lf(e.dataTransfer.files[0]);}
+function cf(){u=null;fp.style.display='none';dzm.textContent='Drop CV here or click to upload';dzs.textContent='pdf / doc / docx · max 10mb';}
+function tt(m){toast.textContent=m;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),3000);}
+</script>
+</body>
+</html>
